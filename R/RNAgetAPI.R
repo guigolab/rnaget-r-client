@@ -66,13 +66,17 @@ RNAget <- R6::R6Class("RNAget",
                           return(private$return_response(url, self$auth_headers))
 
                         },
-                        get_expression_list_ticket = function(args=NULL){
-                          url <- paste0(self$base_url, "/expressions/ticket")
+                        get_expression_list = function(args=NULL,download=FALSE){
+                          if(download){
+                            path <- "/expressions/bytes"
+                          }else{
+                            path <- "/expressions/ticket"
+                          }
+                          url <- paste0(self$base_url, path)
                           if(is.list(args)){
                             url <- httr::modify_url(url, query=args)
                           }else if(!is.null(args)){
-                            print('args must be a list')
-                            return()
+                            stop('args must be a list')
                           }
                           return(private$return_response(url, self$auth_headers))
 
@@ -82,77 +86,53 @@ RNAget <- R6::R6Class("RNAget",
                           if(is.list(args)){
                             url <- httr::modify_url(url, query=args)
                           }else if(!is.null(args)){
-                            print('args must be a list')
-                            return()
+                            stop('args must be a list')
                           }
                           return(private$return_response(url, self$auth_headers))
 
                         },
-                        get_expression_ticket = function(id, args=NULL){
-                          url <- paste0(self$base_url, "/expressions/",id,"/ticket")
+                        get_expression = function(id, args=NULL,download=FALSE){
+                          if(download){
+                            path <- "/bytes"
+                          }else{
+                            path <- "/ticket"
+                          }
+                          url <- paste0(self$base_url, "/expressions/",id,path)
                           if(is.list(args)){
                             url <- httr::modify_url(url, query=args)
                           }else if(!is.null(args)){
-                            print('args must be a list')
-                            return()
+                            stop('args must be a list')
                           }
                           return(private$return_response(url, self$auth_headers))
 
                         },
-                        get_expression_bytes = function(id, args=NULL){
-                          url <- paste0(self$base_url, "/expressions/",id,"/bytes")
+                        get_continuous_list = function(args=NULL, download=FALSE){
+                          if(download){
+                            path <- "/continuous/bytes"
+                          }else{
+                            path <- "/continuous/ticket"
+                          }
+                          url <- paste0(self$base_url, path)
                           if(is.list(args)){
                             url <- httr::modify_url(url, query=args)
                           }else if(!is.null(args)){
-                            print('args must be a list')
-                            return()
+                            stop('args must be a list')
                           }
                           return(private$return_response(url, self$auth_headers))
-
                         },
-                        get_continuous_list_ticket = function(args=NULL){
-                          url <- paste0(self$base_url, "/continuous/ticket")
+                        get_continuous = function(id,args=NULL, download=FALSE){
+                          if(download){
+                            path <- "/bytes"
+                          }else{
+                            path <- "/ticket"
+                          }
+                          url <- paste0(self$base_url, "/continuous/",id,path)
                           if(is.list(args)){
                             url <- httr::modify_url(url, query=args)
                           }else if(!is.null(args)){
-                            print('args must be a list')
-                            return()
+                            stop('args must be a list')
                           }
                           return(private$return_response(url, self$auth_headers))
-
-                        },
-                        get_continuous_list_bytes = function(args=NULL){
-                          url <- paste0(self$base_url, "/continuous/bytes")
-                          if(is.list(args)){
-                            url <- httr::modify_url(url, query=args)
-                          }else if(!is.null(args)){
-                            print('args must be a list')
-                            return()
-                          }
-                          return(private$return_response(url, self$auth_headers))
-
-                        },
-                        get_continuous_ticket = function(id,args=NULL){
-                          url <- paste0(self$base_url, "/continuous/",id,"/ticket")
-                          if(is.list(args)){
-                            url <- httr::modify_url(url, query=args)
-                          }else if(!is.null(args)){
-                            print('args must be a list')
-                            return()
-                          }
-                          return(private$return_response(url, self$auth_headers))
-
-                        },
-                        get_continuous_bytes = function(id){
-                          url <- paste0(self$base_url, "/continuous/",id,"/bytes")
-                          if(is.list(args)){
-                            url <- httr::modify_url(url, query=args)
-                          }else if(!is.null(args)){
-                            print('args must be a list')
-                            return()
-                          }
-                          return(private$return_response(url, self$auth_headers))
-
                         },
                         get_expression_formats = function(){
                           url <- paste0(self$base_url, "/expressions", "/formats")
@@ -181,7 +161,7 @@ RNAget <- R6::R6Class("RNAget",
                                 private$return_response(paste0(self$base_url, "/continuous", "/filters"), self$auth_headers)
                               },
                               {
-                                print('type must be one of projects, studies, expressions or continuous')
+                                stop('type must be one of projects, studies, expressions or continuous')
                               }
                             )
                           )
